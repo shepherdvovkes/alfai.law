@@ -51,13 +51,13 @@ export default function AIAssistantPage() {
     'Завершую аналіз...'
   ])
   const [algorithmLogs] = useState([
-    '🧠 Аналізую запит користувача...',
-    '🔍 Витягую ключові слова через OpenAI API...',
-    '📡 Відправляю запит до Zakon Online API...',
-    '📊 Отримую метадані справ...',
-    '📈 Аналізую розподіл по судових інстанціях...',
-    '🤖 Генерую резюме через ChatGPT...',
-    '✅ Формую фінальну відповідь...'
+    'Аналізую запит користувача...',
+    'Витягую ключові слова через OpenAI API...',
+    'Відправляю запит до Zakon Online API...',
+    'Отримую метадані справ...',
+    'Аналізую розподіл по судових інстанціях...',
+    'Генерую резюме через ChatGPT...',
+    'Формую фінальну відповідь...'
   ])
 
   // Единая функция для плавной прокрутки
@@ -301,22 +301,22 @@ export default function AIAssistantPage() {
       animate={{ opacity: 1, y: 0 }}
       className="mt-4 pt-4 border-t border-white/10"
     >
-      <div className="bg-blue-500/10 rounded-lg p-4 border border-blue-500/20">
+      <div className="bg-blue-500/10 rounded-lg p-4 border border-blue-500/20 w-full">
         <div className="flex items-center space-x-2 mb-3">
           <div className="w-4 h-4 bg-blue-500 rounded-full animate-pulse"></div>
           <h4 className="text-blue-400 text-sm font-medium">Внутрішні алгоритми</h4>
         </div>
-        <div className="space-y-2 max-h-32 overflow-y-auto">
+        <div className="space-y-2 max-h-32 overflow-y-auto w-full">
           {logs.map((log, index) => (
             <motion.div
               key={index}
               initial={{ opacity: 0, x: -10 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: index * 0.2 }}
-              className="flex items-center space-x-2"
+              className="flex items-start space-x-2 w-full"
             >
-              <div className="w-2 h-2 bg-blue-400 rounded-full"></div>
-              <span className="text-blue-300 text-xs">{log}</span>
+              <div className="w-2 h-2 bg-blue-400 rounded-full flex-shrink-0 mt-1"></div>
+              <span className="text-blue-300 text-xs break-words w-full">{log}</span>
             </motion.div>
           ))}
         </div>
@@ -397,7 +397,7 @@ export default function AIAssistantPage() {
                     <Bot size={16} className="text-white" />
                   </div>
                 )}
-                <div className={`rounded-lg p-4 max-w-2xl ${
+                <div className={`rounded-lg p-4 max-w-4xl w-full ${
                   message.sender === 'user' 
                   ? 'bg-primary-500/20' 
                   : 'bg-surface-light'
@@ -427,7 +427,7 @@ export default function AIAssistantPage() {
                       className="mt-4 pt-4 border-t border-white/10"
                     >
                       <div className="bg-blue-500/10 rounded-lg p-4 border border-blue-500/20">
-                        <h4 className="font-semibold text-blue-400 mb-2">📊 Результат аналізу:</h4>
+                        <h4 className="font-semibold text-blue-400 mb-2">Результат аналізу:</h4>
                         <div className="text-sm text-blue-300 whitespace-pre-wrap">
                           {message.analysis}
                         </div>
@@ -454,7 +454,7 @@ export default function AIAssistantPage() {
                           size="sm"
                           className="bg-surface-medium hover:bg-surface-light text-text-primary"
                         >
-                          📄 Посмотреть полный текст дела
+                          Посмотреть полный текст дела
                         </Button>
                         
                         <Button
@@ -462,7 +462,7 @@ export default function AIAssistantPage() {
                           size="sm"
                           className="bg-orange-500 hover:bg-orange-600 text-white"
                         >
-                          🔍 Проанализировать
+                          Проанализировать
                         </Button>
                         
                         <Button
@@ -470,7 +470,7 @@ export default function AIAssistantPage() {
                           size="sm"
                           className="bg-pink-500 hover:bg-pink-600 text-white"
                         >
-                          🎉 Выразить восхищение
+                          Выразить восхищение
                         </Button>
                       </div>
                     </motion.div>
