@@ -167,8 +167,47 @@ async function handleAnalyzeRequest(ws, data) {
     const fullTexts = fullTextsResponse.data.fullTexts
     console.log(`[WebSocket Server] 📄 Loaded ${fullTexts.length} full texts`)
     
+    // Проверяем, есть ли тексты для анализа
+    if (fullTexts.length === 0) {
+      console.log(`[WebSocket Server] ⚠️ No full texts available for analysis`)
+      
+      // Создаем анализ на основе метаданных
+      const metadataAnalysis = await createMetadataAnalysis(metadata)
+      
+      ws.send(JSON.stringify({
+        type: 'analyzeComplete',
+        messageId: messageId,
+        analysis: metadataAnalysis,
+        stats: {
+          totalCases: metadata.length,
+          fullTextsLoaded: 0,
+          analysisType: 'metadata-only'
+        }
+      }))
+      return
+    }
+    
     // Извлекаем тексты для анализа
-    const texts = fullTexts.map(caseItem => caseItem.fullText || caseItem.snippet || '')
+    const texts = fullTexts.map(caseItem => caseItem.fullText || caseItem.snippet || '').filter(text => text.length > 0)
+    
+    if (texts.length === 0) {
+      console.log(`[WebSocket Server] ⚠️ No valid texts extracted for analysis`)
+      
+      // Создаем анализ на основе метаданных
+      const metadataAnalysis = await createMetadataAnalysis(metadata)
+      
+      ws.send(JSON.stringify({
+        type: 'analyzeComplete',
+        messageId: messageId,
+        analysis: metadataAnalysis,
+        stats: {
+          totalCases: metadata.length,
+          fullTextsLoaded: 0,
+          analysisType: 'metadata-only'
+        }
+      }))
+      return
+    }
     
     // Вызываем API анализа
     const response = await axios.post('http://localhost:3000/api/ai/analyze-texts', {
@@ -258,6 +297,59 @@ async function simulateStreaming(ws, fullResponse, messageId) {
     
     // Небольшая задержка для эффекта стриминга
     await new Promise(resolve => setTimeout(resolve, 50))
+  }
+}
+
+// Создаем анализ на основе метаданных
+async function createMetadataAnalysis(metadata) {
+  try {
+    console.log(`[WebSocket Server] 📊 Creating metadata analysis for ${metadata.length} cases`)
+    
+    // Группируем дела по судебным инстанциям
+    const courtLevels = {}
+    metadata.forEach(caseItem => {
+      const level = caseItem.courtLevel || 'Неизвестная инстанция'
+      if (!courtLevels[level]) {
+        courtLevels[level] = []
+      }
+      courtLevels[level].push(caseItem)
+    })
+    
+    // Создаем анализ на основе метаданных
+    let analysis = `## АНАЛІЗ НА ОСНОВІ МЕТАДАНИХ\n\n`
+    analysis += `**Загальна кількість справ:** ${metadata.length}\n\n`
+    
+    // Статистика по инстанциям
+    analysis += `**Розподіл за судовими інстанціями:**\n`
+    Object.entries(courtLevels).forEach(([level, cases]) => {
+      analysis += `- ${level}: ${cases.length} справ\n`
+    })
+    
+    analysis += `\n**Детальний список справ:**\n`
+    metadata.slice(0, 20).forEach((caseItem, index) => {
+      analysis += `${index + 1}. **Справа ${caseItem.doc_id || caseItem.cause_num || 'N/A'}**\n`
+      analysis += `   - Інстанція: ${caseItem.courtLevel || 'Неизвестная'}\n`
+      if (caseItem.snippet) {
+        const snippet = caseItem.snippet.replace(/<[^>]*>/g, '').substring(0, 200)
+        analysis += `   - Опис: ${snippet}...\n`
+      }
+      analysis += `\n`
+    })
+    
+    if (metadata.length > 20) {
+      analysis += `... та ще ${metadata.length - 20} справ\n\n`
+    }
+    
+    analysis += `**Примітка:** Повні тексти справ недоступні через обмеження API. Аналіз проведено на основі метаданих.\n\n`
+    analysis += `**Рекомендації:**\n`
+    analysis += `- Для детального аналізу необхідно налаштувати доступ до повних текстів справ\n`
+    analysis += `- Використовуйте надані метадані для попереднього оцінювання справ\n`
+    analysis += `- Зверніться до адміністратора для налаштування API ключів\n`
+    
+    return analysis
+  } catch (error) {
+    console.error('[WebSocket Server] ❌ Error creating metadata analysis:', error)
+    return 'Помилка створення аналізу на основі метаданих'
   }
 }
 
