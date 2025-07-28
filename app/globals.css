@@ -1,0 +1,314 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-surface-dark text-text-primary font-sans;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+  
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+@layer components {
+  .glass-effect {
+    @apply bg-white/5 backdrop-blur-md border border-white/10;
+  }
+  
+  .glass-card {
+    @apply glass-effect rounded-xl;
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  }
+  
+  .gradient-text {
+    @apply bg-gradient-to-r from-primary-400 to-primary-600 bg-clip-text text-transparent;
+  }
+  
+  .gradient-border {
+    @apply border border-transparent bg-gradient-to-r from-primary-400 to-primary-600 bg-clip-border;
+  }
+  
+  .btn-primary {
+    @apply bg-gradient-to-r from-primary-500 to-primary-600 hover:from-primary-600 hover:to-primary-700 text-white font-medium px-6 py-3 rounded-lg transition-all duration-200;
+    box-shadow: 0 0 20px rgba(0, 102, 255, 0.3);
+  }
+  
+  .btn-primary:hover {
+    box-shadow: 0 0 20px rgba(0, 102, 255, 0.24);
+  }
+  
+  .btn-secondary {
+    @apply bg-surface-light hover:bg-surface-light/80 text-text-primary font-medium px-6 py-3 rounded-lg transition-all duration-200 border border-white/10;
+  }
+  
+  .btn-ghost {
+    @apply text-text-secondary hover:text-text-primary hover:bg-surface-light/50 font-medium px-4 py-2 rounded-lg transition-all duration-200;
+  }
+  
+  .input-field {
+    @apply bg-surface-light border border-white/10 rounded-lg px-4 py-3 text-text-primary placeholder-text-muted focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-200;
+  }
+  
+  .sidebar-item {
+    @apply flex items-center gap-3 px-4 py-3 text-text-secondary hover:text-text-primary hover:bg-surface-light/50 rounded-lg transition-all duration-200 cursor-pointer;
+  }
+  
+  .sidebar-item.active {
+    @apply text-primary-400 bg-primary-500/10 border-r-2 border-primary-500;
+  }
+  
+  .status-badge {
+    @apply px-3 py-1 rounded-full text-xs font-medium;
+  }
+  
+  .status-active {
+    @apply bg-accent-green/20 text-accent-green;
+  }
+  
+  .status-pending {
+    @apply bg-accent-orange/20 text-accent-orange;
+  }
+  
+  .status-closed {
+    @apply bg-text-muted/20 text-text-muted;
+  }
+  
+  .status-urgent {
+    @apply bg-accent-red/20 text-accent-red;
+  }
+  
+  .priority-badge {
+    @apply px-2 py-1 rounded text-xs font-medium;
+  }
+  
+  .priority-low {
+    @apply bg-blue-500/20 text-blue-400;
+  }
+  
+  .priority-medium {
+    @apply bg-yellow-500/20 text-yellow-400;
+  }
+  
+  .priority-high {
+    @apply bg-orange-500/20 text-orange-400;
+  }
+  
+  .priority-urgent {
+    @apply bg-red-500/20 text-red-400;
+  }
+
+  .prose {
+    @apply prose-headings:text-primary-400 prose-a:text-primary-400 prose-strong:text-primary-500;
+  }
+  .prose-invert {
+    @apply prose-headings:text-primary-400 prose-a:text-primary-400 prose-strong:text-primary-500 prose-code:text-accent-orange prose-blockquote:border-primary-500 prose-blockquote:text-text-secondary prose-th:text-primary-400 prose-td:text-text-primary prose-li:marker:text-primary-400;
+  }
+}
+
+@layer utilities {
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+  
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+/* Theme Classes */
+.theme-dark-blue {
+  color-scheme: dark;
+}
+
+.theme-dark-purple {
+  color-scheme: dark;
+}
+
+.theme-dark-green {
+  color-scheme: dark;
+}
+
+.theme-dark-red {
+  color-scheme: dark;
+}
+
+.theme-dark-orange {
+  color-scheme: dark;
+}
+
+/* Custom animations */
+@keyframes shimmer {
+  0% {
+    background-position: -200px 0;
+  }
+  100% {
+    background-position: calc(200px + 100%) 0;
+  }
+}
+
+.shimmer {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200px 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+/* Loading spinner */
+.spinner {
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-left: 2px solid #0066FF;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Markdown Styles for ReactMarkdown */
+.prose {
+  @apply max-w-none;
+}
+
+.prose h1 {
+  @apply text-2xl font-bold text-text-primary mb-4 mt-6;
+}
+
+.prose h2 {
+  @apply text-xl font-semibold text-text-primary mb-3 mt-5;
+}
+
+.prose h3 {
+  @apply text-lg font-medium text-text-primary mb-2 mt-4;
+}
+
+.prose h4, .prose h5, .prose h6 {
+  @apply text-base font-medium text-text-primary mb-2 mt-3;
+}
+
+.prose p {
+  @apply text-text-primary mb-3 leading-relaxed;
+}
+
+.prose ul, .prose ol {
+  @apply text-text-primary mb-3 pl-6;
+}
+
+.prose li {
+  @apply mb-1;
+}
+
+.prose ul li {
+  @apply list-disc;
+}
+
+.prose ol li {
+  @apply list-decimal;
+}
+
+.prose strong {
+  @apply font-semibold text-text-primary;
+}
+
+.prose em {
+  @apply italic text-text-secondary;
+}
+
+.prose code {
+  @apply bg-surface-light px-2 py-1 rounded text-sm font-mono text-accent-green;
+}
+
+.prose pre {
+  @apply bg-surface-light p-4 rounded-lg overflow-x-auto mb-4;
+}
+
+.prose pre code {
+  @apply bg-transparent p-0 text-text-primary;
+}
+
+.prose blockquote {
+  @apply border-l-4 border-primary-500 pl-4 italic text-text-secondary mb-4;
+}
+
+.prose table {
+  @apply w-full border-collapse mb-4;
+}
+
+.prose th {
+  @apply border border-white/20 p-2 bg-surface-light text-text-primary font-semibold text-left;
+}
+
+.prose td {
+  @apply border border-white/20 p-2 text-text-primary;
+}
+
+.prose a {
+  @apply text-primary-400 hover:text-primary-300 underline;
+}
+
+.prose hr {
+  @apply border-white/20 my-6;
+}
+
+/* Dark theme variant */
+.prose-invert {
+  @apply prose;
+}
+
+.prose-invert h1,
+.prose-invert h2,
+.prose-invert h3,
+.prose-invert h4,
+.prose-invert h5,
+.prose-invert h6 {
+  @apply text-text-primary;
+}
+
+.prose-invert p,
+.prose-invert ul,
+.prose-invert ol,
+.prose-invert li {
+  @apply text-text-primary;
+}
+
+.prose-invert strong {
+  @apply text-text-primary;
+}
+
+.prose-invert code {
+  @apply bg-surface-light text-accent-green;
+}
+
+.prose-invert pre {
+  @apply bg-surface-light;
+}
+
+.prose-invert blockquote {
+  @apply border-primary-500 text-text-secondary;
+}
+
+.prose-invert th {
+  @apply bg-surface-light text-text-primary border-white/20;
+}
+
+.prose-invert td {
+  @apply text-text-primary border-white/20;
+}
+
+.prose-invert a {
+  @apply text-primary-400 hover:text-primary-300;
+}
+
+.prose-invert hr {
+  @apply border-white/20;
+} 
